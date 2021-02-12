@@ -1,8 +1,8 @@
 import React, { useState} from "react";
 import MovieList from "./Components/MovieList";
 import FilterMovie from "./Components/FilterMovie";
-import AddMovie from './Components/AddMovie'
-import { button } from "react-bootstrap";
+import AddMovie from './Components/AddMovie';
+import "./App.css";
 
 
 function App () {
@@ -40,7 +40,7 @@ function App () {
 
   // Function AddMovie
 const addNewMovie=(newMovie)=>{
-  if(newMovie.title !== '' && newMovie.description !== '' && newMovie.posterUrl !== '' && newMovie.rate !== '' ){
+  if(newMovie.title !== '' && newMovie.posterUrl !== '' && newMovie.rate !== '' ){
     setMovies([...Movies, newMovie]);
     setWarning(false);
   }
@@ -52,24 +52,39 @@ const warningMsg = warning && <div className='alert alert-danger mt-1' role='ale
 </div>
 
 // Search Movies 
-const [ Movies1 , setMovies1 ] = useState([]);
-const [searchShow,setSearchShow]=useState(false);
-  const searchMovie = (title , rate)=>{
-    if(title !== '' || rate !== 0){
-      setMovies1(Movies.filter((movie)=>{ return (movie.title === title || movie.rate === rate) }))
-      setSearchShow(true);
+const [ MoviesSearch , setMoviesSearch ] = useState([]);
+const [searchTitle,setSearchTitle]=useState('');
+
+  const searchMovieTitle = (title)=>{
+    setSearchTitle(title);
+    if(title !==''){
+      setMoviesSearch(Movies.filter((movie)=>{return movie.title.toLowerCase().includes(title.toLowerCase()) }))
     }
+    else{
+      setMoviesSearch(Movies);
+    }
+    
   }
-  console.log(Movies1);
+  const [rateSearch, setRateSearch] = useState(0);
+
+  const searchMovieRate = (rate)=>{
+    setRateSearch(rate);
+    if(rate !== 0){
+      setMoviesSearch(Movies.filter((movie)=>{return movie.rate === rate }))
+    }
+    else{
+      setMoviesSearch(Movies);
+    }
+    
+  }
  
     return (
-      <div >
+      <div className='App'>
         {warningMsg}
-        <div style={{display:'flex'}}>
-        <FilterMovie searchMovie={searchMovie}/>
-        <button className="btn btn-outline-primary" style={{height:'40px',margin:'5px 430px'}}  onClick={() => setSearchShow(false) }>Home</button>
+        <div style={{display:'flex',flexDirection:'column'}}>
+        <FilterMovie searchMovieTitle={searchMovieTitle} titleInput={searchTitle} searchMovieRate={searchMovieRate} rateInput={rateSearch}/>
+        <MovieList Movies={(searchTitle !=='' || rateSearch !== 0 ) ? MoviesSearch : Movies}/>
         </div>
-        <MovieList Movies={searchShow===false ? Movies : Movies1 }/>
         <AddMovie addNewMovie={addNewMovie}/>
       </div>
     );
