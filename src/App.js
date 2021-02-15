@@ -52,38 +52,15 @@ const warningMsg = warning && <div className='alert alert-danger mt-1' role='ale
 </div>
 
 // Search Movies 
-const [ MoviesSearch , setMoviesSearch ] = useState([]);
+
 const [searchTitle,setSearchTitle]=useState('');
-
-  const searchMovieTitle = (title)=>{
-    setSearchTitle(title);
-    if(title !==''){
-      setMoviesSearch(Movies.filter((movie)=>{return movie.title.toLowerCase().includes(title.toLowerCase()) }))
-    }
-    else{
-      setMoviesSearch(Movies);
-    }
-    
-  }
-  const [rateSearch, setRateSearch] = useState(0);
-
-  const searchMovieRate = (rate)=>{
-    setRateSearch(rate);
-    if(rate !== 0){
-      setMoviesSearch(Movies.filter((movie)=>{return movie.rate === rate }))
-    }
-    else{
-      setMoviesSearch(Movies);
-    }
-    
-  }
- 
+const [rateSearch, setRateSearch] = useState(1);
     return (
       <div className='App'>
         {warningMsg}
         <div style={{display:'flex',flexDirection:'column'}}>
-        <FilterMovie searchMovieTitle={searchMovieTitle} titleInput={searchTitle} searchMovieRate={searchMovieRate} rateInput={rateSearch}/>
-        <MovieList Movies={(searchTitle !=='' || rateSearch !== 0 ) ? MoviesSearch : Movies}/>
+        <FilterMovie setSearchTitle={setSearchTitle} titleInput={searchTitle} setRateSearch={setRateSearch} rateInput={rateSearch}/>
+        <MovieList Movies={Movies} titleInput={searchTitle} rateInput={rateSearch}/>
         </div>
         <AddMovie addNewMovie={addNewMovie}/>
       </div>

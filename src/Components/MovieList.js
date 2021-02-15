@@ -2,10 +2,14 @@ import React from 'react';
 import MovieCard from "./MovieCard";
 import "./Style.css";
 
-const MovieList =(props)=>{
+const MovieList =({Movies,titleInput, rateInput})=>{
         return (
           <div className="MovieCard">
-          {props.Movies.map((movie,i) => {
+          {Movies
+            .filter((movie)=> movie.title.toLowerCase().includes(titleInput.toLowerCase())
+            && movie.rate >= rateInput
+            )
+            .map((movie,i) => {
             return (
               <MovieCard
                 title={movie.title}
